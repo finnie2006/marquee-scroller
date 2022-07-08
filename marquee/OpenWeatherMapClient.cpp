@@ -36,6 +36,11 @@ void OpenWeatherMapClient::updateWeatherApiKey(String ApiKey) {
 
 void OpenWeatherMapClient::updateWeather() {
   WiFiClient weatherClient;
+  if (myApiKey == "") {
+    weathers[0].error = "Please provide an API key for weather.";
+    Serial.println(weathers[0].error);
+    return;
+  }
   String apiGetData = "GET /data/2.5/group?id=" + myCityIDs + "&units=" + units + "&cnt=1&APPID=" + myApiKey + " HTTP/1.1";
 
   Serial.println("Getting Weather Data");
@@ -256,12 +261,12 @@ String OpenWeatherMapClient::getPressure(int index)
 
 String OpenWeatherMapClient::getHigh(int index)
 {
-  return weathers[index].high;
+  return roundValue(weathers[index].high);
 }
 
 String OpenWeatherMapClient::getLow(int index)
 {
-  return weathers[index].low;
+  return roundValue(weathers[index].low);
 }
 
 String OpenWeatherMapClient::getIcon(int index) {
